@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TweetComposer } from "./TweetComposer";
-import { Plus, MessageCircle } from "lucide-react";
+import { Plus, Bookmark } from "lucide-react";
 
 export function FloatingTweetButton() {
   const [isOpen, setIsOpen] = useState(false);

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Repeat, Share, MoreHorizontal, Eye } from "lucide-react";
+import { Heart, MessageCircle, Repeat, Share, MoreHorizontal, Eye, ExternalLink, Bookmark, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface Tweet {
@@ -23,6 +23,8 @@ interface Tweet {
   hasThread: boolean;
   threadCount: number;
   images: string[];
+  url?: string;
+  domain?: string;
 }
 
 interface TweetCardProps {
@@ -31,15 +33,15 @@ interface TweetCardProps {
 
 export function TweetCard({ tweet }: TweetCardProps) {
   const [isLiked, setIsLiked] = useState(false);
-  const [isRetweeted, setIsRetweeted] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(true);
   const [showPreview, setShowPreview] = useState(false);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
   };
 
-  const handleRetweet = () => {
-    setIsRetweeted(!isRetweeted);
+  const handleBookmark = () => {
+    setIsBookmarked(!isBookmarked);
   };
 
   return (
@@ -75,7 +77,7 @@ export function TweetCard({ tweet }: TweetCardProps) {
           <p className="text-foreground leading-relaxed">{tweet.content}</p>
         </div>
 
-        {/* Thread Badge */}
+        {/* Collection Badge */}
         {tweet.hasThread && (
           <Link to={`/twitter/thread/${tweet.id}`}>
             <Badge 
@@ -83,7 +85,7 @@ export function TweetCard({ tweet }: TweetCardProps) {
               className="mb-4 hover:bg-gradient-sakura transition-smooth cursor-pointer thread-swipe"
             >
               <MessageCircle className="w-3 h-3 mr-1" />
-              {tweet.threadCount} tweet thread
+              {tweet.threadCount} bookmark collection
             </Badge>
           </Link>
         )}
@@ -106,16 +108,37 @@ export function TweetCard({ tweet }: TweetCardProps) {
             ))}
           </div>
         )}
-
-        {/* Tweet Preview */}
+        {/* URL Preview */}
+        {tweet.url && (
+          <div className="mb-4 p-4 bg-washi rounded-lg border border-border washi-texture hover:shadow-paper transition-smooth cursor-pointer group">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 bg-gradient-ink rounded-lg flex items-center justify-center flex-shrink-0">
+                <ExternalLink className="w-5 h-5 text-primary-foreground" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs text-bamboo font-medium">{tweet.domain}</span>
+                  <ExternalLink className="w-3 h-3 text-muted-foreground group-hover:text-seal transition-smooth" />
+                </div>
+                <p className="text-sm text-foreground font-medium line-clamp-2">
+                  {tweet.content.split('.')[0]}...
+                </p>
+                <p className="text-xs text-muted-foreground mt-1 truncate">
+                  {tweet.url}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+        {/* Bookmark Preview */}
         {showPreview && (
           <div className="mb-4 p-4 bg-washi rounded-lg border border-border washi-texture">
             <div className="flex items-center gap-2 mb-2">
-              <Eye className="w-4 h-4 text-bamboo" />
-              <span className="text-sm text-bamboo font-medium">Tweet Preview</span>
+              <Bookmark className="w-4 h-4 text-bamboo" />
+              <span className="text-sm text-bamboo font-medium">Bookmark Preview</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              "{tweet.content.substring(0, 100)}..." • by {tweet.author.name}
+              "{tweet.content.substring(0, 100)}..." • saved by {tweet.author.name}
             </p>
           </div>
         )}
@@ -130,13 +153,13 @@ export function TweetCard({ tweet }: TweetCardProps) {
           <Button 
             variant="ghost" 
             size="sm" 
-            onClick={handleRetweet}
+            onClick={handleBookmark}
             className={`flex items-center gap-2 transition-bounce ${
-              isRetweeted ? "text-bamboo" : "text-muted-foreground hover:text-bamboo"
+              isBookmarked ? "text-gold" : "text-muted-foreground hover:text-gold"
             }`}
           >
-            <Repeat className="w-4 h-4" />
-            <span className="text-sm">{tweet.stats.retweets + (isRetweeted ? 1 : 0)}</span>
+            <Star className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
+            <span className="text-sm">{tweet.stats.retweets + (isBookmarked ? 1 : 0)}</span>
           </Button>
 
           <Button 
@@ -152,7 +175,7 @@ export function TweetCard({ tweet }: TweetCardProps) {
           </Button>
 
           <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:text-bamboo">
-            <Share className="w-4 h-4" />
+            <ExternalLink className="w-4 h-4" />
           </Button>
         </div>
       </div>

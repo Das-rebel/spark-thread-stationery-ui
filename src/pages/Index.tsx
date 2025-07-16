@@ -33,24 +33,24 @@ const Index = () => {
               </div>
               
               <h1 className="text-5xl font-bold text-ink mb-4">
-                Brain Spark UI Boost
+                Brain Spark - Second Brain
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Where neural networks meet social interaction. Experience the future of AI-powered conversations.
+                Your digital knowledge companion. Organize, discover, and connect your thoughts with intelligent bookmark management.
               </p>
               
               <div className="flex items-center justify-center gap-4">
                 <Link to="/twitter">
                   <Button variant="ink" size="floating" className="gap-3">
                     <MessageCircle className="w-5 h-5" />
-                    Explore Twitter Interface
+                    Explore Knowledge Hub
                     <ArrowRight className="w-4 h-4" />
                   </Button>
                 </Link>
                 
                 <Button variant="sakura" size="floating" className="gap-3">
                   <Brain className="w-5 h-5" />
-                  View Neural Network
+                  View Neural Map
                 </Button>
               </div>
             </div>
@@ -63,9 +63,9 @@ const Index = () => {
                 <div className="w-12 h-12 bg-gradient-sakura rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-bounce">
                   <MessageCircle className="w-6 h-6 text-seal" />
                 </div>
-                <h3 className="text-lg font-semibold text-ink">Thread View</h3>
+                <h3 className="text-lg font-semibold text-ink">Collection View</h3>
                 <p className="text-sm text-muted-foreground">
-                  Swipable thread navigation with beautiful Japanese stationary aesthetics
+                  Swipable bookmark collections with beautiful Japanese stationary aesthetics
                 </p>
               </div>
             </Card>
@@ -75,9 +75,9 @@ const Index = () => {
                 <div className="w-12 h-12 bg-gradient-ink rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-bounce">
                   <Sparkles className="w-6 h-6 text-primary-foreground" />
                 </div>
-                <h3 className="text-lg font-semibold text-ink">Tweet Preview</h3>
+                <h3 className="text-lg font-semibold text-ink">Smart Preview</h3>
                 <p className="text-sm text-muted-foreground">
-                  Rich preview system with image galleries and content summaries
+                  Rich preview system with image galleries and content summaries for saved bookmarks
                 </p>
               </div>
             </Card>
@@ -87,17 +87,17 @@ const Index = () => {
                 <div className="w-12 h-12 bg-gradient-sakura rounded-full flex items-center justify-center mx-auto group-hover:scale-110 transition-bounce">
                   <Brain className="w-6 h-6 text-seal" />
                 </div>
-                <h3 className="text-lg font-semibold text-ink">Neural UI</h3>
+                <h3 className="text-lg font-semibold text-ink">Knowledge Graph</h3>
                 <p className="text-sm text-muted-foreground">
-                  Retro Japanese design with modern AI-powered interactions
+                  AI-powered knowledge connections with modern brain-computer interfaces
                 </p>
               </div>
             </Card>
           </div>
 
-          {/* Neural Network Visualization */}
+          {/* Knowledge Network Visualization */}
           <Card className="paper-card p-6">
-            <h2 className="text-2xl font-bold text-ink mb-6 text-center">Neural Network Visualization</h2>
+            <h2 className="text-2xl font-bold text-ink mb-6 text-center">Knowledge Network Visualization</h2>
             <NeuralNetworkView />
           </Card>
         </div>
