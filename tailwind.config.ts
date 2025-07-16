@@ -61,7 +61,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Japanese Stationary Theme Colors
+				sakura: 'hsl(var(--sakura))',
+				ink: 'hsl(var(--ink-black))',
+				washi: 'hsl(var(--washi-cream))',
+				seal: 'hsl(var(--seal-red))',
+				bamboo: 'hsl(var(--bamboo-green))',
+				gold: 'hsl(var(--gold-accent))'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +91,55 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'swipe-in': {
+					'0%': {
+						transform: 'translateX(100%)',
+						opacity: '0'
+					},
+					'100%': {
+						transform: 'translateX(0)',
+						opacity: '1'
+					}
+				},
+				'swipe-out': {
+					'0%': {
+						transform: 'translateX(0)',
+						opacity: '1'
+					},
+					'100%': {
+						transform: 'translateX(-100%)',
+						opacity: '0'
+					}
+				},
+				'fade-slide-up': {
+					'0%': {
+						transform: 'translateY(20px)',
+						opacity: '0'
+					},
+					'100%': {
+						transform: 'translateY(0)',
+						opacity: '1'
+					}
+				},
+				'ink-flow': {
+					'0%': {
+						transform: 'scaleX(0)',
+						transformOrigin: 'left'
+					},
+					'100%': {
+						transform: 'scaleX(1)',
+						transformOrigin: 'left'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'swipe-in': 'swipe-in 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+				'swipe-out': 'swipe-out 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+				'fade-slide-up': 'fade-slide-up 0.3s ease-out',
+				'ink-flow': 'ink-flow 0.6s ease-out'
 			}
 		}
 	},

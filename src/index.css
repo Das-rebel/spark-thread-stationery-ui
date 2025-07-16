@@ -2,41 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Retro Japanese Stationary Design System - All colors MUST be HSL */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base Colors - Warm cream paper inspired */
+    --background: 45 25% 97%;
+    --foreground: 25 15% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Card Colors - Paper texture feeling */
+    --card: 45 30% 96%;
+    --card-foreground: 25 15% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    /* Popover Colors */
+    --popover: 45 30% 96%;
+    --popover-foreground: 25 15% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Deep ink blue like traditional Japanese ink */
+    --primary: 220 40% 25%;
+    --primary-foreground: 45 25% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Soft washi paper tone */
+    --secondary: 45 20% 90%;
+    --secondary-foreground: 25 15% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted - Subtle paper grain */
+    --muted: 45 15% 88%;
+    --muted-foreground: 25 10% 50%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Warm red like traditional seals */
+    --accent: 355 60% 65%;
+    --accent-foreground: 45 25% 97%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Destructive - Traditional vermillion */
+    --destructive: 15 75% 55%;
+    --destructive-foreground: 45 25% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Borders - Subtle paper edge */
+    --border: 45 15% 85%;
+    --input: 45 15% 92%;
+    --ring: 220 40% 25%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
+
+    /* Custom Japanese Stationary Colors */
+    --sakura: 345 50% 85%;
+    --ink-black: 25 15% 15%;
+    --washi-cream: 45 30% 94%;
+    --seal-red: 355 70% 60%;
+    --bamboo-green: 120 25% 45%;
+    --gold-accent: 45 80% 70%;
+
+    /* Gradients */
+    --gradient-paper: linear-gradient(135deg, hsl(45 30% 96%), hsl(45 25% 94%));
+    --gradient-ink: linear-gradient(135deg, hsl(220 40% 25%), hsl(220 45% 20%));
+    --gradient-sakura: linear-gradient(135deg, hsl(345 50% 85%), hsl(345 40% 80%));
+
+    /* Shadows - Traditional paper depth */
+    --shadow-paper: 0 2px 8px hsl(25 15% 15% / 0.08);
+    --shadow-deep: 0 8px 24px hsl(25 15% 15% / 0.12);
+    --shadow-floating: 0 12px 32px hsl(25 15% 15% / 0.15);
+
+    /* Animation tokens */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     --sidebar-background: 0 0% 98%;
 
@@ -101,5 +130,157 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    background: var(--gradient-paper);
+  }
+}
+
+@layer components {
+  /* Paper Card Effect */
+  .paper-card {
+    @apply bg-card rounded-lg;
+    background: var(--gradient-paper);
+    box-shadow: var(--shadow-paper);
+    border: 1px solid hsl(var(--border));
+  }
+
+  .paper-card-floating {
+    @apply paper-card;
+    box-shadow: var(--shadow-floating);
+    transform: translateY(-2px);
+  }
+
+  /* Thread Swipe Animation */
+  .thread-swipe {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .thread-swipe:hover {
+    transform: translateX(-8px);
+  }
+
+  /* Japanese Stationary Effects */
+  .washi-texture {
+    background: linear-gradient(45deg, 
+      hsl(var(--washi-cream)) 25%, 
+      transparent 25%, 
+      transparent 75%, 
+      hsl(var(--washi-cream)) 75%), 
+    linear-gradient(-45deg, 
+      hsl(var(--washi-cream)) 25%, 
+      transparent 25%, 
+      transparent 75%, 
+      hsl(var(--washi-cream)) 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+  }
+
+  /* Ink Brush Effects */
+  .ink-brush-underline {
+    position: relative;
+  }
+
+  .ink-brush-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-ink);
+    border-radius: 2px;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+
+  .ink-brush-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  /* Seal Effect */
+  .seal-stamp {
+    @apply relative;
+  }
+
+  .seal-stamp::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 12px;
+    height: 12px;
+    background: hsl(var(--seal-red));
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: all 0.2s ease;
+  }
+
+  .seal-stamp:hover::before {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@layer utilities {
+  .text-sakura {
+    color: hsl(var(--sakura));
+  }
+
+  .text-ink {
+    color: hsl(var(--ink-black));
+  }
+
+  .text-seal {
+    color: hsl(var(--seal-red));
+  }
+
+  .text-bamboo {
+    color: hsl(var(--bamboo-green));
+  }
+
+  .text-gold {
+    color: hsl(var(--gold-accent));
+  }
+
+  .bg-sakura {
+    background-color: hsl(var(--sakura));
+  }
+
+  .bg-washi {
+    background-color: hsl(var(--washi-cream));
+  }
+
+  .bg-gradient-paper {
+    background: var(--gradient-paper);
+  }
+
+  .bg-gradient-ink {
+    background: var(--gradient-ink);
+  }
+
+  .bg-gradient-sakura {
+    background: var(--gradient-sakura);
+  }
+
+  .shadow-paper {
+    box-shadow: var(--shadow-paper);
+  }
+
+  .shadow-deep {
+    box-shadow: var(--shadow-deep);
+  }
+
+  .shadow-floating {
+    box-shadow: var(--shadow-floating);
+  }
+
+  .transition-smooth {
+    transition: var(--transition-smooth);
+  }
+
+  .transition-bounce {
+    transition: var(--transition-bounce);
   }
 }
