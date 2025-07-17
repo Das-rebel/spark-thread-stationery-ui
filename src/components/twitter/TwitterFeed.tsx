@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { TweetCard } from "./TweetCard";
 import { TweetComposer } from "./TweetComposer";
+import { PullToRefresh } from "@/components/ui/pulltorefresh";
+import { toast } from "@/hooks/use-toast";
 
 const mockBookmarks = [
   {
@@ -78,10 +80,41 @@ const mockBookmarks = [
 ];
 
 export function TwitterFeed() {
-  const [bookmarks] = useState(mockBookmarks);
+  const [bookmarks, setBookmarks] = useState(mockBookmarks);
+
+  const handleRefresh = async () => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    
+    // Add a new mock bookmark to demonstrate refresh
+    const newBookmark = {
+      id: String(Date.now()),
+      author: {
+        name: "Fresh Knowledge",
+        handle: "@freshknowledge",
+        avatar: "✨",
+        verified: false,
+      },
+      content: "Just refreshed! Here's a brand new bookmark about the latest breakthrough in AI research.",
+      timestamp: "now",
+      stats: { likes: 0, retweets: 0, replies: 0 },
+      hasThread: false,
+      threadCount: 0,
+      images: [],
+      url: "https://example.com/fresh-ai-research",
+      domain: "research.ai",
+    };
+    
+    setBookmarks(prev => [newBookmark, ...prev]);
+    toast({
+      title: "Feed refreshed! ↓",
+      description: "New bookmarks loaded successfully",
+    });
+  };
 
   return (
-    <div className="space-y-6">
+    <PullToRefresh onRefresh={handleRefresh}>
+      <div className="space-y-6">
       {/* Compose Bookmark Section */}
       <Card className="paper-card p-6">
         <TweetComposer compact />
@@ -119,5 +152,6 @@ export function TwitterFeed() {
         </div>
       </Card>
     </div>
+    </PullToRefresh>
   );
 }

@@ -283,4 +283,70 @@
   .transition-bounce {
     transition: var(--transition-bounce);
   }
+
+  /* Interactive animations */
+  .thread-swipe {
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+  }
+  
+  .thread-swipe:hover {
+    transform: translateX(4px);
+  }
+
+  /* Pull to Refresh animations */
+  .pull-indicator {
+    transform: translateY(-100%);
+    transition: transform 0.3s ease-out;
+  }
+
+  /* Long press feedback */
+  .long-press-active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease-out;
+  }
+
+  /* Bookmark save animation */
+  .bookmark-saved {
+    animation: bookmarkBounce 0.4s ease-out;
+  }
+
+  @keyframes bookmarkBounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  /* Peep modal entrance */
+  .peep-enter {
+    animation: peepSlideUp 0.3s ease-out;
+  }
+
+  @keyframes peepSlideUp {
+    0% { 
+      opacity: 0;
+      transform: scale(0.9) translateY(20px);
+    }
+    100% { 
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  /* Fade slide animation for feed items */
+  .animate-fade-slide-up {
+    animation: fadeSlideUp 0.5s ease-out forwards;
+    opacity: 0;
+  }
+
+  @keyframes fadeSlideUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 }

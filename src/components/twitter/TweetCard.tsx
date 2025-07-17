@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, MessageCircle, Repeat, Share, MoreHorizontal, Eye, ExternalLink, Bookmark, Star } from "lucide-react";
 import { Link } from "react-router-dom";
+import { BookmarkPeep } from "./BookmarkPeep";
+import { toast } from "@/hooks/use-toast";
 
 interface Tweet {
   id: string;
@@ -35,6 +37,11 @@ export function TweetCard({ tweet }: TweetCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(true);
   const [showPreview, setShowPreview] = useState(false);
+  const [showPeep, setShowPeep] = useState(false);
+  const [longPressActive, setLongPressActive] = useState(false);
+  
+  const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+  const touchStartPos = useRef({ x: 0, y: 0 });
 
   const handleLike = () => {
     setIsLiked(!isLiked);
@@ -42,10 +49,65 @@ export function TweetCard({ tweet }: TweetCardProps) {
 
   const handleBookmark = () => {
     setIsBookmarked(!isBookmarked);
+    toast({
+      title: isBookmarked ? "Removed from saved" : "Saved forever! 🔖",
+      description: isBookmarked ? "Bookmark removed from your collection" : "Added to your knowledge vault",
+    });
   };
 
+  // Long press handlers
+  const handleLongPressStart = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    
+    touchStartPos.current = { x: clientX, y: clientY };
+    setLongPressActive(true);
+    
+    longPressTimer.current = setTimeout(() => {
+      setShowPeep(true);
+      setLongPressActive(false);
+    }, 500); // 500ms for long press
+  }, []);
+
+  const handleLongPressEnd = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+    setLongPressActive(false);
+  }, []);
+
+  const handleLongPressMove = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    if (!longPressTimer.current) return;
+    
+    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+    
+    const deltaX = Math.abs(clientX - touchStartPos.current.x);
+    const deltaY = Math.abs(clientY - touchStartPos.current.y);
+    
+    // Cancel long press if user moves too much
+    if (deltaX > 10 || deltaY > 10) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+      setLongPressActive(false);
+    }
+  }, []);
+
   return (
-    <Card className="paper-card hover:shadow-floating transition-smooth group">
+    <>
+      <Card 
+        className={`paper-card hover:shadow-floating transition-smooth group cursor-pointer select-none ${
+          longPressActive ? "scale-95 shadow-paper" : ""
+        }`}
+        onTouchStart={handleLongPressStart}
+        onTouchEnd={handleLongPressEnd}
+        onTouchMove={handleLongPressMove}
+        onMouseDown={handleLongPressStart}
+        onMouseUp={handleLongPressEnd}
+        onMouseMove={handleLongPressMove}
+        onMouseLeave={handleLongPressEnd}
+      >
       <div className="p-6">
         {/* Tweet Header */}
         <div className="flex items-start justify-between mb-4">
@@ -180,5 +242,13 @@ export function TweetCard({ tweet }: TweetCardProps) {
         </div>
       </div>
     </Card>
+
+    {/* Bookmark Peep Modal */}
+    <BookmarkPeep 
+      tweet={tweet}
+      isOpen={showPeep}
+      onClose={() => setShowPeep(false)}
+    />
+    </>
   );
 }
