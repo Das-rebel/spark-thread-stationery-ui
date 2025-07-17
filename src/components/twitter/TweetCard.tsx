@@ -2,7 +2,7 @@ import { useState, useRef, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Repeat, Share, MoreHorizontal, Eye, ExternalLink, Bookmark, Star } from "lucide-react";
+import { Heart, MessageCircle, Repeat, Share, MoreHorizontal, Eye, ExternalLink, Bookmark, Star, Zap, Brain, Twitter, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 import { BookmarkPeep } from "./BookmarkPeep";
 import { toast } from "@/hooks/use-toast";
@@ -27,6 +27,7 @@ interface Tweet {
   images: string[];
   url?: string;
   domain?: string;
+  source?: 'twitter' | 'whatsapp' | 'web';
 }
 
 interface TweetCardProps {
@@ -207,11 +208,6 @@ export function TweetCard({ tweet }: TweetCardProps) {
 
         {/* Action Buttons */}
         <div className="flex items-center justify-between pt-4 border-t border-border">
-          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:text-bamboo">
-            <MessageCircle className="w-4 h-4" />
-            <span className="text-sm">{tweet.stats.replies}</span>
-          </Button>
-
           <Button 
             variant="ghost" 
             size="sm" 
@@ -221,24 +217,40 @@ export function TweetCard({ tweet }: TweetCardProps) {
             }`}
           >
             <Star className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
-            <span className="text-sm">{tweet.stats.retweets + (isBookmarked ? 1 : 0)}</span>
-          </Button>
-
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleLike}
-            className={`flex items-center gap-2 transition-bounce ${
-              isLiked ? "text-seal" : "text-muted-foreground hover:text-seal"
-            }`}
-          >
-            <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
-            <span className="text-sm">{tweet.stats.likes + (isLiked ? 1 : 0)}</span>
+            <span className="text-sm">Save</span>
           </Button>
 
           <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:text-bamboo">
-            <ExternalLink className="w-4 h-4" />
+            <Share className="w-4 h-4" />
+            <span className="text-sm">Share</span>
           </Button>
+
+          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:text-seal">
+            <Zap className="w-4 h-4" />
+            <span className="text-sm">Actionable</span>
+          </Button>
+
+          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:text-bamboo">
+            <Brain className="w-4 h-4" />
+            <span className="text-sm">Train AI</span>
+          </Button>
+        </div>
+
+        {/* Source Badge */}
+        <div className="flex items-center justify-between pt-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Source:</span>
+            <div className="flex items-center gap-1">
+              {tweet.source === 'whatsapp' ? (
+                <MessageSquare className="w-3 h-3 text-green-500" />
+              ) : (
+                <Twitter className="w-3 h-3 text-blue-500" />
+              )}
+              <span className="text-xs text-muted-foreground capitalize">
+                {tweet.source || 'twitter'}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </Card>

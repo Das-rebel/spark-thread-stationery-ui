@@ -22,6 +22,7 @@ const mockBookmarks = [
     images: [],
     url: "https://example.com/neural-networks-article",
     domain: "towardsdatascience.com",
+    source: "twitter" as const,
   },
   {
     id: "2",
@@ -39,6 +40,7 @@ const mockBookmarks = [
     images: ["/api/placeholder/500/300"],
     url: "https://arxiv.org/abs/quantum-neural-networks",
     domain: "arxiv.org",
+    source: "whatsapp" as const,
   },
   {
     id: "3",
