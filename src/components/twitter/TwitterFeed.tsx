@@ -115,45 +115,46 @@ export function TwitterFeed() {
   };
 
   return (
-    <PullToRefresh onRefresh={handleRefresh}>
-      <div className="space-y-6">
-      {/* Compose Bookmark Section */}
-      <Card className="paper-card p-6">
-        <TweetComposer compact />
-      </Card>
+    <div className="flex-1 overflow-hidden pb-20">
+      <PullToRefresh onRefresh={handleRefresh}>
+        <div className="h-full overflow-y-auto">
+          {/* Header */}
+          <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-border p-4 z-10 safe-area-inset-top">
+            <h2 className="text-xl font-semibold text-ink brush-stroke">Collections</h2>
+            <p className="text-sm text-muted-foreground">Your curated knowledge</p>
+          </div>
 
-      {/* Feed Header */}
-      <Card className="paper-card p-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-xl font-bold text-ink">Knowledge Feed</h1>
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground">Latest bookmarks</span>
-            <div className="w-2 h-2 bg-seal rounded-full animate-pulse"></div>
+          {/* Compose Bookmark Section */}
+          <div className="p-4">
+            <Card className="paper-card p-4">
+              <TweetComposer compact />
+            </Card>
+          </div>
+
+          {/* Bookmarks */}
+          <div className="p-4 space-y-4">
+            {bookmarks.map((bookmark, index) => (
+              <div
+                key={bookmark.id}
+                className="animate-fade-slide-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <TweetCard tweet={bookmark} />
+              </div>
+            ))}
+          </div>
+
+          {/* Load More */}
+          <div className="p-4">
+            <Card className="paper-card p-8 text-center">
+              <p className="text-muted-foreground mb-4">You've caught up with all your bookmarks!</p>
+              <div className="w-16 h-16 mx-auto bg-gradient-sakura rounded-full flex items-center justify-center">
+                <span className="text-2xl">📚</span>
+              </div>
+            </Card>
           </div>
         </div>
-      </Card>
-
-      {/* Bookmarks */}
-      <div className="space-y-4">
-        {bookmarks.map((bookmark, index) => (
-          <div
-            key={bookmark.id}
-            className="animate-fade-slide-up"
-            style={{ animationDelay: `${index * 100}ms` }}
-          >
-            <TweetCard tweet={bookmark} />
-          </div>
-        ))}
-      </div>
-
-      {/* Load More */}
-      <Card className="paper-card p-8 text-center">
-        <p className="text-muted-foreground mb-4">You've caught up with all your bookmarks!</p>
-        <div className="w-16 h-16 mx-auto bg-gradient-sakura rounded-full flex items-center justify-center">
-          <span className="text-2xl">📚</span>
-        </div>
-      </Card>
+      </PullToRefresh>
     </div>
-    </PullToRefresh>
   );
 }

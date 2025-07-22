@@ -13,7 +13,7 @@ export function FloatingTweetButton() {
         <Button 
           variant="ink" 
           size="icon"
-          className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-floating hover:shadow-deep transition-bounce z-50 seal-stamp"
+          className="fixed bottom-24 right-4 w-14 h-14 rounded-full shadow-floating hover:shadow-deep transition-bounce z-40 seal-stamp max-w-md mx-auto"
         >
           <Plus className="w-6 h-6" />
         </Button>

@@ -98,7 +98,7 @@ export function TweetCard({ tweet }: TweetCardProps) {
   return (
     <>
       <Card 
-        className={`paper-card hover:shadow-floating transition-smooth group cursor-pointer select-none ${
+        className={`paper-card hover:shadow-floating transition-smooth group cursor-pointer select-none active:scale-98 ${
           longPressActive ? "scale-95 shadow-paper" : ""
         }`}
         onTouchStart={handleLongPressStart}
@@ -109,11 +109,11 @@ export function TweetCard({ tweet }: TweetCardProps) {
         onMouseMove={handleLongPressMove}
         onMouseLeave={handleLongPressEnd}
       >
-      <div className="p-6">
-        {/* Tweet Header */}
-        <div className="flex items-start justify-between mb-4">
+      <div className="p-4">
+        {/* Bookmark Header */}
+        <div className="flex items-start justify-between mb-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-sakura rounded-full flex items-center justify-center text-xl seal-stamp">
+            <div className="w-10 h-10 bg-gradient-sakura rounded-full flex items-center justify-center text-lg seal-stamp">
               {tweet.author.avatar}
             </div>
             <div>
@@ -207,32 +207,32 @@ export function TweetCard({ tweet }: TweetCardProps) {
         )}
 
         {/* Action Buttons */}
-        <div className="flex items-center justify-between pt-4 border-t border-border">
+        <div className="grid grid-cols-4 gap-2 pt-3 border-t border-border">
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={handleBookmark}
-            className={`flex items-center gap-2 transition-bounce ${
+            className={`flex flex-col items-center gap-1 py-3 transition-bounce min-h-12 ${
               isBookmarked ? "text-gold" : "text-muted-foreground hover:text-gold"
             }`}
           >
-            <Star className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
-            <span className="text-sm">Save</span>
+            <Star className={`w-5 h-5 ${isBookmarked ? "fill-current" : ""}`} />
+            <span className="text-xs">Save</span>
           </Button>
 
-          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:text-bamboo">
-            <Share className="w-4 h-4" />
-            <span className="text-sm">Share</span>
+          <Button variant="ghost" size="sm" className="flex flex-col items-center gap-1 py-3 text-muted-foreground hover:text-bamboo min-h-12">
+            <Share className="w-5 h-5" />
+            <span className="text-xs">Share</span>
           </Button>
 
-          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:text-seal">
-            <Zap className="w-4 h-4" />
-            <span className="text-sm">Actionable</span>
+          <Button variant="ghost" size="sm" className="flex flex-col items-center gap-1 py-3 text-muted-foreground hover:text-seal min-h-12">
+            <Zap className="w-5 h-5" />
+            <span className="text-xs">Action</span>
           </Button>
 
-          <Button variant="ghost" size="sm" className="flex items-center gap-2 text-muted-foreground hover:text-bamboo">
-            <Brain className="w-4 h-4" />
-            <span className="text-sm">Train AI</span>
+          <Button variant="ghost" size="sm" className="flex flex-col items-center gap-1 py-3 text-muted-foreground hover:text-bamboo min-h-12">
+            <Brain className="w-5 h-5" />
+            <span className="text-xs">Train AI</span>
           </Button>
         </div>
 
