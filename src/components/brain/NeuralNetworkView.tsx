@@ -75,14 +75,23 @@ function NetworkConnection({ start, end, activity }: {
 
 function Scene({ nodes, isAnimating }: { nodes: NodeData[]; isAnimating: boolean }) {
   const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [nodeActivities, setNodeActivities] = useState<Record<string, number>>(() => {
+    const activities: Record<string, number> = {};
+    nodes.forEach((node, index) => {
+      activities[node.id] = Math.random();
+    });
+    return activities;
+  });
   
   useFrame((state) => {
     if (isAnimating) {
-      // Update node activities with wave patterns
+      // Update node activities with wave patterns without mutating props
+      const time = state.clock.getElapsedTime();
+      const newActivities: Record<string, number> = {};
       nodes.forEach((node, index) => {
-        const time = state.clock.getElapsedTime();
-        node.activity = Math.abs(Math.sin(time * 0.5 + index * 0.3));
+        newActivities[node.id] = Math.abs(Math.sin(time * 0.5 + index * 0.3));
       });
+      setNodeActivities(newActivities);
     }
   });
 
@@ -93,17 +102,19 @@ function Scene({ nodes, isAnimating }: { nodes: NodeData[]; isAnimating: boolean
       node.connections.forEach((connId) => {
         const targetNode = nodes.find(n => n.id === connId);
         if (targetNode) {
+          const nodeActivity = nodeActivities[node.id] || 0;
+          const targetActivity = nodeActivities[targetNode.id] || 0;
           conns.push({
             start: node.position,
             end: targetNode.position,
-            activity: (node.activity + targetNode.activity) / 2
+            activity: (nodeActivity + targetActivity) / 2
           });
         }
       });
     });
     
     return conns;
-  }, [nodes]);
+  }, [nodes, nodeActivities]);
 
   return (
     <>
@@ -126,7 +137,7 @@ function Scene({ nodes, isAnimating }: { nodes: NodeData[]; isAnimating: boolean
         <NetworkNode
           key={node.id}
           position={node.position}
-          activity={node.activity}
+          activity={nodeActivities[node.id] || 0}
           layer={node.layer}
           onClick={() => setSelectedNode(node.id === selectedNode ? null : node.id)}
         />
