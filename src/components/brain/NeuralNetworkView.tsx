@@ -1,6 +1,6 @@
 import { useRef, useState, useMemo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Text, Sphere, Line } from "@react-three/drei";
+import { OrbitControls, Text } from "@react-three/drei";
 import * as THREE from "three";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -25,30 +25,32 @@ function NetworkNode({ position, activity, layer, onClick }: {
   useFrame((state) => {
     if (meshRef.current) {
       const time = state.clock.getElapsedTime();
-      meshRef.current.scale.setScalar(0.8 + Math.sin(time * 2 + activity * 10) * 0.2);
+      const scale = 0.8 + Math.sin(time * 2 + activity * 10) * 0.2;
+      meshRef.current.scale.setScalar(Math.max(0.5, scale));
     }
   });
 
   const color = useMemo(() => {
-    const hue = layer * 60; // Different hue for each layer
-    return `hsl(${hue}, 70%, ${50 + activity * 30}%)`;
+    const hue = layer * 60;
+    const lightness = Math.max(20, Math.min(80, 50 + activity * 30));
+    return new THREE.Color(`hsl(${hue}, 70%, ${lightness}%)`);
   }, [layer, activity]);
 
   return (
-    <Sphere 
+    <mesh 
       ref={meshRef}
       position={position} 
-      args={[0.3]} 
       onClick={onClick}
     >
+      <sphereGeometry args={[0.3, 16, 16]} />
       <meshStandardMaterial 
         color={color} 
         emissive={color}
-        emissiveIntensity={activity * 0.5}
+        emissiveIntensity={activity * 0.3}
         metalness={0.1}
         roughness={0.3}
       />
-    </Sphere>
+    </mesh>
   );
 }
 
@@ -62,14 +64,22 @@ function NetworkConnection({ start, end, activity }: {
     new THREE.Vector3(...end)
   ], [start, end]);
 
+  const geometry = useMemo(() => {
+    const geom = new THREE.BufferGeometry().setFromPoints(points);
+    return geom;
+  }, [points]);
+
+  const color = useMemo(() => {
+    const lightness = Math.max(20, Math.min(80, 30 + activity * 50));
+    return new THREE.Color(`hsl(200, 70%, ${lightness}%)`);
+  }, [activity]);
+
   return (
-    <Line
-      points={points}
-      color={`hsl(200, 70%, ${30 + activity * 50}%)`}
-      lineWidth={1 + activity * 3}
-      transparent
-      opacity={0.3 + activity * 0.4}
-    />
+    <primitive object={new THREE.Line(geometry, new THREE.LineBasicMaterial({ 
+      color: color,
+      transparent: true,
+      opacity: 0.3 + activity * 0.4
+    }))} />
   );
 }
 
