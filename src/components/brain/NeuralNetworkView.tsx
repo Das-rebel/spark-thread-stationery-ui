@@ -260,7 +260,7 @@ export function NeuralNetworkView() {
       
       {/* Control Panel */}
       <div className="absolute top-4 left-4 flex flex-col gap-2">
-        <Badge variant="secondary" className="text-xs font-inter">
+        <Badge variant="secondary" className="text-xs font-sans">
           <Zap className="w-3 h-3 mr-1" />
           Neural Network 3D
         </Badge>
@@ -269,7 +269,7 @@ export function NeuralNetworkView() {
             size="sm"
             variant={isAnimating ? "default" : "outline"}
             onClick={() => setIsAnimating(!isAnimating)}
-            className="text-xs"
+            className="text-xs font-sans"
           >
             {isAnimating ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
           </Button>
@@ -277,7 +277,7 @@ export function NeuralNetworkView() {
             size="sm"
             variant="outline"
             onClick={resetNetwork}
-            className="text-xs"
+            className="text-xs font-sans"
           >
             <RotateCcw className="w-3 h-3" />
           </Button>
@@ -286,7 +286,7 @@ export function NeuralNetworkView() {
       
       {/* Info Panel */}
       <div className="absolute bottom-4 right-4">
-        <Badge variant="outline" className="text-xs font-inter bg-background/80 backdrop-blur-sm">
+        <Badge variant="outline" className="text-xs font-sans bg-background/80 backdrop-blur-sm">
           {nodes.length} Nodes • Interactive • Real-time
         </Badge>
       </div>
@@ -294,7 +294,7 @@ export function NeuralNetworkView() {
       {/* Speed Control */}
       <div className="absolute bottom-4 left-4">
         <div className="flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-md px-2 py-1 border">
-          <span className="text-xs text-muted-foreground font-inter">Speed:</span>
+          <span className="text-xs text-muted-foreground font-sans">Speed:</span>
           <input
             type="range"
             min="0.1"

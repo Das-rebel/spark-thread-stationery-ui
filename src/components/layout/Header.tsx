@@ -24,7 +24,7 @@ const sources: Source[] = [
     status: 'connected',
     lastSync: '2 mins ago',
     count: 1247,
-    color: 'text-blue-500'
+    color: 'text-primary'
   },
   {
     id: 'whatsapp',
@@ -33,7 +33,7 @@ const sources: Source[] = [
     status: 'syncing',
     lastSync: 'Syncing...',
     count: 89,
-    color: 'text-green-500'
+    color: 'text-bamboo'
   },
   {
     id: 'web',
@@ -42,7 +42,7 @@ const sources: Source[] = [
     status: 'disconnected',
     lastSync: '1 hour ago',
     count: 324,
-    color: 'text-purple-500'
+    color: 'text-accent'
   },
 ];
 
@@ -60,19 +60,19 @@ export function Header() {
   const getStatusIcon = (status: Source['status']) => {
     switch (status) {
       case 'connected':
-        return <CheckCircle className="w-4 h-4 text-green-500" />;
+        return <CheckCircle className="w-4 h-4 text-bamboo" />;
       case 'disconnected':
-        return <XCircle className="w-4 h-4 text-red-500" />;
+        return <XCircle className="w-4 h-4 text-destructive" />;
       case 'syncing':
-        return <Clock className="w-4 h-4 text-yellow-500 animate-pulse" />;
+        return <Clock className="w-4 h-4 text-accent animate-pulse" />;
     }
   };
 
   const getStatusBadge = (status: Source['status']) => {
     const variants = {
-      connected: 'bg-green-500/10 text-green-600 border-green-500/20',
-      disconnected: 'bg-red-500/10 text-red-600 border-red-500/20',
-      syncing: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20'
+      connected: 'bg-bamboo/10 text-bamboo border-bamboo/20',
+      disconnected: 'bg-destructive/10 text-destructive border-destructive/20',
+      syncing: 'bg-accent/10 text-accent border-accent/20'
     };
     
     return (
@@ -96,8 +96,8 @@ export function Header() {
         {/* Hamburger Menu */}
         <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="hover:bg-washi">
-              <Menu className="w-5 h-5" />
+            <Button variant="ghost" size="icon" className="hover:bg-muted transition-smooth">
+              <Menu className="w-5 h-5 text-foreground" />
             </Button>
           </SheetTrigger>
           

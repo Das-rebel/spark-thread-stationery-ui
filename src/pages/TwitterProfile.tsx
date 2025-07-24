@@ -94,47 +94,47 @@ const TwitterProfile = () => {
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h1 className="text-2xl font-bold text-ink">{mockProfile.name}</h1>
+                          <h1 className="text-responsive-xl font-bold text-ink">{mockProfile.name}</h1>
                           {mockProfile.verified && (
                             <div className="w-6 h-6 bg-seal rounded-full flex items-center justify-center">
-                              <span className="text-sm text-white">✓</span>
+                              <span className="text-xs text-white">✓</span>
                             </div>
                           )}
                         </div>
-                        <p className="text-bamboo">{mockProfile.handle}</p>
+                        <p className="text-responsive-sm text-bamboo">{mockProfile.handle}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm">
-                        <MessageCircle className="w-4 h-4 mr-2" />
+                      <Button variant="outline" size="sm" className="text-responsive-sm">
+                        <MessageCircle className="icon-sm mr-2" />
                         Message
                       </Button>
                       <Button variant="ghost" size="icon">
-                        <Settings className="w-4 h-4" />
+                        <Settings className="icon-sm" />
                       </Button>
                     </div>
                   </div>
 
-                  <p className="text-foreground mb-4 leading-relaxed">{mockProfile.bio}</p>
+                  <p className="text-responsive-base text-foreground mb-4 leading-relaxed">{mockProfile.bio}</p>
 
                   {/* Profile Details */}
-                  <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-4">
+                  <div className="flex flex-wrap items-center gap-4 text-responsive-sm text-muted-foreground mb-4">
                     <div className="flex items-center gap-1">
-                      <MapPin className="w-4 h-4" />
+                      <MapPin className="icon-sm" />
                       {mockProfile.location}
                     </div>
                     <div className="flex items-center gap-1">
-                      <LinkIcon className="w-4 h-4" />
-                      <a href="#" className="text-seal hover:underline">{mockProfile.website}</a>
+                      <LinkIcon className="icon-sm" />
+                      <a href="#" className="text-seal hover:underline ink-brush-underline">{mockProfile.website}</a>
                     </div>
                     <div className="flex items-center gap-1">
-                      <Calendar className="w-4 h-4" />
+                      <Calendar className="icon-sm" />
                       Joined {mockProfile.joinDate}
                     </div>
                   </div>
 
                   {/* Stats */}
-                  <div className="flex items-center gap-6 text-sm">
+                  <div className="flex items-center gap-6 text-responsive-sm">
                     <div>
                       <span className="font-bold text-ink">{mockProfile.following.toLocaleString()}</span>
                       <span className="text-muted-foreground ml-1">Following</span>
@@ -159,16 +159,16 @@ const TwitterProfile = () => {
               <Card className="paper-card">
                 <Tabs value={activeTab} onValueChange={setActiveTab}>
                   <TabsList className="w-full bg-washi border-b border-border rounded-none">
-                    <TabsTrigger value="bookmarks" className="flex items-center gap-2">
-                      <Bookmark className="w-4 h-4" />
+                    <TabsTrigger value="bookmarks" className="flex items-center gap-2 text-responsive-sm">
+                      <Bookmark className="icon-sm" />
                       Bookmarks
                     </TabsTrigger>
-                    <TabsTrigger value="collections" className="flex items-center gap-2">
-                      <Star className="w-4 h-4" />
+                    <TabsTrigger value="collections" className="flex items-center gap-2 text-responsive-sm">
+                      <Star className="icon-sm" />
                       Collections
                     </TabsTrigger>
-                    <TabsTrigger value="likes" className="flex items-center gap-2">
-                      <Star className="w-4 h-4" />
+                    <TabsTrigger value="likes" className="flex items-center gap-2 text-responsive-sm">
+                      <Star className="icon-sm" />
                       Likes
                     </TabsTrigger>
                   </TabsList>
@@ -188,11 +188,11 @@ const TwitterProfile = () => {
                               🧠
                             </div>
                             <div>
-                              <h3 className="font-semibold text-ink">Neural Networks</h3>
-                              <p className="text-sm text-muted-foreground">24 bookmarks</p>
+                              <h3 className="font-semibold text-ink text-responsive-base">Neural Networks</h3>
+                              <p className="text-responsive-sm text-muted-foreground">24 bookmarks</p>
                             </div>
                           </div>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-responsive-sm text-muted-foreground">
                             Curated collection of neural network research, tutorials, and breakthroughs.
                           </p>
                         </Card>
