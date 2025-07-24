@@ -1,106 +1,289 @@
-import { useEffect, useRef } from "react";
+import { useRef, useState, useMemo } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { OrbitControls, Text, Sphere, Line } from "@react-three/drei";
+import * as THREE from "three";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { RotateCcw, Play, Pause, Zap } from "lucide-react";
 
-export function NeuralNetworkView() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+interface NodeData {
+  position: [number, number, number];
+  layer: number;
+  id: string;
+  activity: number;
+  connections: string[];
+}
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+function NetworkNode({ position, activity, layer, onClick }: { 
+  position: [number, number, number]; 
+  activity: number; 
+  layer: number;
+  onClick?: () => void;
+}) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  
+  useFrame((state) => {
+    if (meshRef.current) {
+      const time = state.clock.getElapsedTime();
+      meshRef.current.scale.setScalar(0.8 + Math.sin(time * 2 + activity * 10) * 0.2);
+    }
+  });
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const resizeCanvas = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    };
-
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    // Neural network visualization
-    const nodes = [
-      // Input layer
-      ...Array.from({ length: 4 }, (_, i) => ({ x: 50, y: 50 + i * 60, layer: 0 })),
-      // Hidden layer 1
-      ...Array.from({ length: 6 }, (_, i) => ({ x: 200, y: 30 + i * 50, layer: 1 })),
-      // Hidden layer 2
-      ...Array.from({ length: 4 }, (_, i) => ({ x: 350, y: 50 + i * 60, layer: 2 })),
-      // Output layer
-      ...Array.from({ length: 2 }, (_, i) => ({ x: 500, y: 80 + i * 80, layer: 3 })),
-    ];
-
-    let animationFrame: number;
-
-    const animate = () => {
-      if (!ctx || !canvas) return;
-      
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // Draw connections
-      ctx.strokeStyle = "hsl(220, 40%, 25%)";
-      ctx.lineWidth = 0.5;
-      ctx.globalAlpha = 0.3;
-
-      for (let i = 0; i < nodes.length; i++) {
-        for (let j = 0; j < nodes.length; j++) {
-          if (nodes[j].layer === nodes[i].layer + 1) {
-            ctx.beginPath();
-            ctx.moveTo(nodes[i].x, nodes[i].y);
-            ctx.lineTo(nodes[j].x, nodes[j].y);
-            ctx.stroke();
-          }
-        }
-      }
-
-      // Draw nodes
-      ctx.globalAlpha = 1;
-      nodes.forEach((node, index) => {
-        const pulse = Math.sin(Date.now() * 0.003 + index * 0.5) * 0.3 + 0.7;
-        
-        // Node glow
-        ctx.shadowColor = "hsl(355, 70%, 60%)";
-        ctx.shadowBlur = 10 * pulse;
-        
-        // Node
-        ctx.fillStyle = `hsl(355, 70%, ${60 + pulse * 20}%)`;
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, 8 + pulse * 3, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Reset shadow
-        ctx.shadowBlur = 0;
-      });
-
-      animationFrame = requestAnimationFrame(animate);
-    };
-
-    animate();
-
-    return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-    };
-  }, []);
+  const color = useMemo(() => {
+    const hue = layer * 60; // Different hue for each layer
+    return `hsl(${hue}, 70%, ${50 + activity * 30}%)`;
+  }, [layer, activity]);
 
   return (
-    <div className="relative w-full h-64 bg-washi rounded-lg border border-border overflow-hidden">
-      <canvas
-        ref={canvasRef}
-        className="w-full h-full"
-        style={{ background: "linear-gradient(135deg, hsl(45, 30%, 96%), hsl(45, 25%, 94%))" }}
+    <Sphere 
+      ref={meshRef}
+      position={position} 
+      args={[0.3]} 
+      onClick={onClick}
+    >
+      <meshStandardMaterial 
+        color={color} 
+        emissive={color}
+        emissiveIntensity={activity * 0.5}
+        metalness={0.1}
+        roughness={0.3}
       />
-      <div className="absolute top-4 left-4">
-        <span className="text-xs text-bamboo font-medium bg-washi px-2 py-1 rounded border">
-          Neural Network Visualization
-        </span>
+    </Sphere>
+  );
+}
+
+function NetworkConnection({ start, end, activity }: { 
+  start: [number, number, number]; 
+  end: [number, number, number]; 
+  activity: number;
+}) {
+  const points = useMemo(() => [
+    new THREE.Vector3(...start),
+    new THREE.Vector3(...end)
+  ], [start, end]);
+
+  return (
+    <Line
+      points={points}
+      color={`hsl(200, 70%, ${30 + activity * 50}%)`}
+      lineWidth={1 + activity * 3}
+      transparent
+      opacity={0.3 + activity * 0.4}
+    />
+  );
+}
+
+function Scene({ nodes, isAnimating }: { nodes: NodeData[]; isAnimating: boolean }) {
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  
+  useFrame((state) => {
+    if (isAnimating) {
+      // Update node activities with wave patterns
+      nodes.forEach((node, index) => {
+        const time = state.clock.getElapsedTime();
+        node.activity = Math.abs(Math.sin(time * 0.5 + index * 0.3));
+      });
+    }
+  });
+
+  const connections = useMemo(() => {
+    const conns: Array<{ start: [number, number, number]; end: [number, number, number]; activity: number }> = [];
+    
+    nodes.forEach((node) => {
+      node.connections.forEach((connId) => {
+        const targetNode = nodes.find(n => n.id === connId);
+        if (targetNode) {
+          conns.push({
+            start: node.position,
+            end: targetNode.position,
+            activity: (node.activity + targetNode.activity) / 2
+          });
+        }
+      });
+    });
+    
+    return conns;
+  }, [nodes]);
+
+  return (
+    <>
+      <ambientLight intensity={0.4} />
+      <pointLight position={[10, 10, 10]} intensity={1} />
+      <pointLight position={[-10, -10, -10]} intensity={0.5} color="#ff6b6b" />
+      
+      {/* Render connections first (behind nodes) */}
+      {connections.map((conn, index) => (
+        <NetworkConnection
+          key={index}
+          start={conn.start}
+          end={conn.end}
+          activity={conn.activity}
+        />
+      ))}
+      
+      {/* Render nodes */}
+      {nodes.map((node) => (
+        <NetworkNode
+          key={node.id}
+          position={node.position}
+          activity={node.activity}
+          layer={node.layer}
+          onClick={() => setSelectedNode(node.id === selectedNode ? null : node.id)}
+        />
+      ))}
+      
+      {/* Layer labels */}
+      <Text position={[-6, 3, 0]} fontSize={0.8} color="hsl(var(--muted-foreground))">
+        Input
+      </Text>
+      <Text position={[-2, 3, 0]} fontSize={0.8} color="hsl(var(--muted-foreground))">
+        Hidden 1
+      </Text>
+      <Text position={[2, 3, 0]} fontSize={0.8} color="hsl(var(--muted-foreground))">
+        Hidden 2
+      </Text>
+      <Text position={[6, 3, 0]} fontSize={0.8} color="hsl(var(--muted-foreground))">
+        Output
+      </Text>
+      
+      {selectedNode && (
+        <Text 
+          position={[0, -4, 0]} 
+          fontSize={0.6} 
+          color="hsl(var(--primary))"
+          anchorX="center"
+        >
+          Node {selectedNode} Selected
+        </Text>
+      )}
+    </>
+  );
+}
+
+export function NeuralNetworkView() {
+  const [isAnimating, setIsAnimating] = useState(true);
+  const [networkSpeed, setNetworkSpeed] = useState(1);
+  
+  const nodes = useMemo(() => {
+    const nodeData: NodeData[] = [];
+    
+    // Input layer (4 nodes)
+    for (let i = 0; i < 4; i++) {
+      nodeData.push({
+        id: `input-${i}`,
+        position: [-6, 2 - i * 1.5, 0] as [number, number, number],
+        layer: 0,
+        activity: Math.random(),
+        connections: [`hidden1-0`, `hidden1-1`, `hidden1-2`, `hidden1-3`, `hidden1-4`, `hidden1-5`]
+      });
+    }
+    
+    // Hidden layer 1 (6 nodes)
+    for (let i = 0; i < 6; i++) {
+      nodeData.push({
+        id: `hidden1-${i}`,
+        position: [-2, 3 - i * 1.2, 0] as [number, number, number],
+        layer: 1,
+        activity: Math.random(),
+        connections: [`hidden2-0`, `hidden2-1`, `hidden2-2`, `hidden2-3`]
+      });
+    }
+    
+    // Hidden layer 2 (4 nodes)
+    for (let i = 0; i < 4; i++) {
+      nodeData.push({
+        id: `hidden2-${i}`,
+        position: [2, 2 - i * 1.5, 0] as [number, number, number],
+        layer: 2,
+        activity: Math.random(),
+        connections: [`output-0`, `output-1`]
+      });
+    }
+    
+    // Output layer (2 nodes)
+    for (let i = 0; i < 2; i++) {
+      nodeData.push({
+        id: `output-${i}`,
+        position: [6, 0.5 - i * 1, 0] as [number, number, number],
+        layer: 3,
+        activity: Math.random(),
+        connections: []
+      });
+    }
+    
+    return nodeData;
+  }, []);
+
+  const resetNetwork = () => {
+    nodes.forEach(node => {
+      node.activity = Math.random();
+    });
+  };
+
+  return (
+    <div className="relative w-full h-80 bg-gradient-to-br from-background to-muted rounded-lg border border-border overflow-hidden">
+      <Canvas
+        camera={{ position: [0, 0, 15], fov: 60 }}
+        style={{ background: 'transparent' }}
+      >
+        <Scene nodes={nodes} isAnimating={isAnimating} />
+        <OrbitControls 
+          enablePan={false} 
+          enableZoom={true} 
+          minDistance={8} 
+          maxDistance={25}
+          autoRotate={isAnimating}
+          autoRotateSpeed={networkSpeed}
+        />
+      </Canvas>
+      
+      {/* Control Panel */}
+      <div className="absolute top-4 left-4 flex flex-col gap-2">
+        <Badge variant="secondary" className="text-xs font-inter">
+          <Zap className="w-3 h-3 mr-1" />
+          Neural Network 3D
+        </Badge>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant={isAnimating ? "default" : "outline"}
+            onClick={() => setIsAnimating(!isAnimating)}
+            className="text-xs"
+          >
+            {isAnimating ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={resetNetwork}
+            className="text-xs"
+          >
+            <RotateCcw className="w-3 h-3" />
+          </Button>
+        </div>
       </div>
+      
+      {/* Info Panel */}
       <div className="absolute bottom-4 right-4">
-        <span className="text-xs text-muted-foreground bg-washi px-2 py-1 rounded border">
-          Real-time Activity
-        </span>
+        <Badge variant="outline" className="text-xs font-inter bg-background/80 backdrop-blur-sm">
+          {nodes.length} Nodes • Interactive • Real-time
+        </Badge>
+      </div>
+      
+      {/* Speed Control */}
+      <div className="absolute bottom-4 left-4">
+        <div className="flex items-center gap-2 bg-background/80 backdrop-blur-sm rounded-md px-2 py-1 border">
+          <span className="text-xs text-muted-foreground font-inter">Speed:</span>
+          <input
+            type="range"
+            min="0.1"
+            max="3"
+            step="0.1"
+            value={networkSpeed}
+            onChange={(e) => setNetworkSpeed(parseFloat(e.target.value))}
+            className="w-16 h-1 bg-muted rounded-lg appearance-none cursor-pointer"
+          />
+        </div>
       </div>
     </div>
   );
