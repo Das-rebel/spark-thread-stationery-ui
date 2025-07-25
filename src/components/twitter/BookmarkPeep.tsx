@@ -104,7 +104,7 @@ export function BookmarkPeep({ tweet, isOpen, onClose }: BookmarkPeepProps) {
 
           {/* Tweet Content */}
           <div className="mb-6">
-            <p className="text-foreground leading-relaxed text-responsive-lg">{tweet.content}</p>
+            <p className="text-foreground leading-relaxed text-lg">{tweet.content}</p>
           </div>
 
           {/* Collection Badge */}
