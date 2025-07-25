@@ -2,7 +2,8 @@ import { useState, useRef, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Repeat, Share, MoreHorizontal, Eye, ExternalLink, Bookmark, Star, Zap, Brain, Twitter, MessageSquare } from "lucide-react";
+import { MoreHorizontal, Eye, ExternalLink, Bookmark, Twitter, MessageSquare, MessageCircle } from "lucide-react";
+import { CustomIcons } from "@/components/icons";
 import { Link } from "react-router-dom";
 import { BookmarkPeep } from "./BookmarkPeep";
 import { toast } from "@/hooks/use-toast";
@@ -216,22 +217,22 @@ export function TweetCard({ tweet }: TweetCardProps) {
               isBookmarked ? "text-gold" : "text-muted-foreground hover:text-gold"
             }`}
           >
-            <Star className={`w-5 h-5 ${isBookmarked ? "fill-current" : ""}`} />
-            <span className="text-xs">Save</span>
+            <CustomIcons.Bookmark className={`w-5 h-5 ${isBookmarked ? "fill-current" : ""}`} />
+            <span className="text-xs">Bookmark</span>
           </Button>
 
           <Button variant="ghost" size="sm" className="flex flex-col items-center gap-1 py-3 text-muted-foreground hover:text-bamboo min-h-12">
-            <Share className="w-5 h-5" />
+            <CustomIcons.Share className="w-5 h-5" />
             <span className="text-xs">Share</span>
           </Button>
 
           <Button variant="ghost" size="sm" className="flex flex-col items-center gap-1 py-3 text-muted-foreground hover:text-seal min-h-12">
-            <Zap className="w-5 h-5" />
-            <span className="text-xs">Action</span>
+            <CustomIcons.ActionBolt className="w-5 h-5" />
+            <span className="text-xs">Actionable</span>
           </Button>
 
           <Button variant="ghost" size="sm" className="flex flex-col items-center gap-1 py-3 text-muted-foreground hover:text-bamboo min-h-12">
-            <Brain className="w-5 h-5" />
+            <CustomIcons.BrainAI className="w-5 h-5" />
             <span className="text-xs">Train AI</span>
           </Button>
         </div>

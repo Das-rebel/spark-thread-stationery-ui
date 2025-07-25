@@ -9,6 +9,8 @@ import TwitterExplore from "./pages/TwitterExplore";
 import TwitterNotifications from "./pages/TwitterNotifications";
 import TwitterMessages from "./pages/TwitterMessages";
 import TwitterProfile from "./pages/TwitterProfile";
+import TwitterSearch from "./pages/TwitterSearch";
+import UserSettings from "./pages/UserSettings";
 import ThreadView from "./pages/ThreadView";
 import TweetCompose from "./pages/TweetCompose";
 import NotFound from "./pages/NotFound";
@@ -26,6 +28,8 @@ const App = () => (
           <Route path="/twitter" element={<TwitterHome />} />
           <Route path="/twitter/explore" element={<TwitterExplore />} />
           <Route path="/twitter/notifications" element={<TwitterNotifications />} />
+          <Route path="/twitter/search" element={<TwitterSearch />} />
+          <Route path="/twitter/settings" element={<UserSettings />} />
           <Route path="/twitter/thread/:threadId" element={<ThreadView />} />
           <Route path="/twitter/compose" element={<TweetCompose />} />
           <Route path="/twitter/messages" element={<TwitterMessages />} />
