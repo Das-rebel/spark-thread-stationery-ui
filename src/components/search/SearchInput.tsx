@@ -93,7 +93,7 @@ export function SearchInput({ placeholder = "Search your knowledge...", onSearch
   return (
     <div ref={containerRef} className={`relative ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
-        <CustomIcons.SearchEnhanced className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+        <CustomIcons.SearchEnhanced className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
         <Input
           ref={inputRef}
           type="text"
@@ -117,7 +117,7 @@ export function SearchInput({ placeholder = "Search your knowledge...", onSearch
       </form>
 
       {showSuggestions && (
-        <Card className="absolute top-full left-0 right-0 mt-2 bg-background/95 backdrop-blur-sm border border-border shadow-floating z-[100] max-h-80 overflow-y-auto">
+        <Card className="absolute top-full left-0 right-0 mt-2 bg-background/95 backdrop-blur-sm border border-border shadow-floating z-50 max-h-80 overflow-y-auto">
           <div className="p-2">
             {filteredSuggestions.length > 0 ? (
               <>
@@ -191,7 +191,7 @@ export function SearchInput({ placeholder = "Search your knowledge...", onSearch
               </>
             ) : (
               <div className="p-4 text-center text-muted-foreground">
-                <CustomIcons.SearchEnhanced className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <CustomIcons.SearchEnhanced className="w-6 h-6 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">No suggestions found</p>
               </div>
             )}

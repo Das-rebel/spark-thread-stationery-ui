@@ -33,11 +33,11 @@ export const CustomIcons = {
 
   SearchEnhanced: ({ className = "w-5 h-5", ...props }) => (
     <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>
-      <circle cx="11" cy="11" r="8"/>
+      <circle cx="11" cy="11" r="6"/>
       <path d="m21 21-4.35-4.35"/>
-      <circle cx="11" cy="8" r="1"/>
-      <circle cx="8" cy="11" r="1"/>
-      <circle cx="14" cy="11" r="1"/>
+      <circle cx="11" cy="9" r="0.5"/>
+      <circle cx="9" cy="11" r="0.5"/>
+      <circle cx="13" cy="11" r="0.5"/>
     </svg>
   ),
 
