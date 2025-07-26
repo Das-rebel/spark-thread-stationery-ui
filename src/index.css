@@ -61,6 +61,7 @@
     /* Shadows - Traditional paper depth */
     --shadow-light: 25 15% 15% / 0.05;
     --shadow-medium: 25 15% 15% / 0.08;
+    --shadow-elegant: 0 4px 16px hsl(25 15% 15% / 0.06);
     --shadow-paper: 0 2px 8px hsl(25 15% 15% / 0.08);
     --shadow-deep: 0 8px 24px hsl(25 15% 15% / 0.12);
     --shadow-floating: 0 12px 32px hsl(25 15% 15% / 0.15);
@@ -280,6 +281,10 @@
 
   .shadow-paper {
     box-shadow: var(--shadow-paper);
+  }
+
+  .shadow-elegant {
+    box-shadow: var(--shadow-elegant);
   }
 
   .shadow-deep {

@@ -117,7 +117,7 @@ export function SearchInput({ placeholder = "Search your knowledge...", onSearch
       </form>
 
       {showSuggestions && (
-        <Card className="absolute top-full left-0 right-0 mt-2 paper-card shadow-floating z-50 max-h-80 overflow-y-auto">
+        <Card className="absolute top-full left-0 right-0 mt-2 bg-background/95 backdrop-blur-sm border border-border shadow-floating z-[100] max-h-80 overflow-y-auto">
           <div className="p-2">
             {filteredSuggestions.length > 0 ? (
               <>
@@ -130,7 +130,7 @@ export function SearchInput({ placeholder = "Search your knowledge...", onSearch
                         <Button
                           key={suggestion.id}
                           variant="ghost"
-                          className="w-full justify-start text-left p-2 h-auto hover:bg-washi"
+                          className="w-full justify-start text-left p-2 h-auto hover:bg-muted/50 transition-smooth"
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
                           <div className="flex items-center gap-3 w-full">
@@ -151,7 +151,7 @@ export function SearchInput({ placeholder = "Search your knowledge...", onSearch
                         <Button
                           key={suggestion.id}
                           variant="ghost"
-                          className="w-full justify-start text-left p-2 h-auto hover:bg-washi"
+                          className="w-full justify-start text-left p-2 h-auto hover:bg-muted/50 transition-smooth"
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
                           <div className="flex items-center gap-3 w-full">
@@ -177,7 +177,7 @@ export function SearchInput({ placeholder = "Search your knowledge...", onSearch
                         <Button
                           key={suggestion.id}
                           variant="ghost"
-                          className="w-full justify-start text-left p-2 h-auto hover:bg-washi"
+                          className="w-full justify-start text-left p-2 h-auto hover:bg-muted/50 transition-smooth"
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
                           <div className="flex items-center gap-3 w-full">

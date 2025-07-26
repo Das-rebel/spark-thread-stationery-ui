@@ -77,7 +77,7 @@ export default function TwitterSearch() {
                 </div>
                 <div className="space-y-3">
                   {trendingTopics.map((topic, index) => (
-                    <div key={topic.id} className="flex items-center justify-between group hover:bg-washi rounded-lg p-2 -m-2 transition-smooth cursor-pointer">
+                    <div key={topic.id} className="flex items-center justify-between group hover:bg-muted/50 rounded-lg p-2 -m-2 transition-smooth cursor-pointer">
                       <div className="flex items-center gap-3">
                         <div className="w-6 h-6 bg-gradient-sakura rounded-full flex items-center justify-center text-xs font-bold text-seal">
                           {index + 1}
@@ -99,11 +99,11 @@ export default function TwitterSearch() {
               <Card className="paper-card shadow-floating p-4">
                 <h3 className="font-semibold text-ink mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-2 gap-3">
-                  <Button variant="outline" className="h-16 flex flex-col gap-2 hover:bg-washi">
+                  <Button variant="outline" className="h-16 flex flex-col gap-2 hover:bg-muted/50 transition-smooth">
                     <CustomIcons.BrainAI className="w-6 h-6 text-primary" />
                     <span className="text-xs">Train AI</span>
                   </Button>
-                  <Button variant="outline" className="h-16 flex flex-col gap-2 hover:bg-washi">
+                  <Button variant="outline" className="h-16 flex flex-col gap-2 hover:bg-muted/50 transition-smooth">
                     <CustomIcons.Analytics className="w-6 h-6 text-bamboo" />
                     <span className="text-xs">Analytics</span>
                   </Button>
@@ -119,7 +119,7 @@ export default function TwitterSearch() {
                 </div>
                 <div className="space-y-3">
                   {collections.map((collection) => (
-                    <div key={collection.id} className="flex items-center justify-between group hover:bg-washi rounded-lg p-3 -m-1 transition-smooth cursor-pointer">
+                    <div key={collection.id} className="flex items-center justify-between group hover:bg-muted/50 rounded-lg p-3 -m-1 transition-smooth cursor-pointer">
                       <div className="flex items-center gap-3">
                         <div className={`w-10 h-10 ${collection.color} rounded-lg flex items-center justify-center`}>
                           <CustomIcons.Bookmark className="w-5 h-5 text-white" />
@@ -149,7 +149,7 @@ export default function TwitterSearch() {
                     <Button
                       key={index}
                       variant="ghost"
-                      className="w-full justify-start text-left p-3 h-auto hover:bg-washi"
+                      className="w-full justify-start text-left p-3 h-auto hover:bg-muted/50 transition-smooth"
                       onClick={() => handleSearch(search)}
                     >
                       <div className="flex items-center gap-3 w-full">
