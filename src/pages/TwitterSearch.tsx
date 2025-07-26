@@ -49,7 +49,7 @@ export default function TwitterSearch() {
     <AppLayout>
       <div className="min-h-screen pb-20">
         {/* Header */}
-        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border">
+        <div className="sticky top-0 z-40 bg-background/95 backdrop-blur-sm border-b border-border shadow-elegant">
           <div className="p-4">
             <SearchInput 
               placeholder="Search bookmarks, notes, and collections..."
@@ -62,7 +62,7 @@ export default function TwitterSearch() {
         {/* Content */}
         <div className="p-4 space-y-6">
           <Tabs defaultValue="discover" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 paper-card">
+            <TabsList className="grid w-full grid-cols-3 paper-card shadow-floating">
               <TabsTrigger value="discover" className="text-xs">Discover</TabsTrigger>
               <TabsTrigger value="collections" className="text-xs">Collections</TabsTrigger>
               <TabsTrigger value="history" className="text-xs">History</TabsTrigger>
@@ -70,7 +70,7 @@ export default function TwitterSearch() {
 
             <TabsContent value="discover" className="space-y-4">
               {/* Trending Section */}
-              <Card className="paper-card p-4">
+              <Card className="paper-card shadow-floating p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <TrendingUp className="w-5 h-5 text-primary" />
                   <h3 className="font-semibold text-ink">Trending Topics</h3>
@@ -96,7 +96,7 @@ export default function TwitterSearch() {
               </Card>
 
               {/* Quick Actions */}
-              <Card className="paper-card p-4">
+              <Card className="paper-card shadow-floating p-4">
                 <h3 className="font-semibold text-ink mb-4">Quick Actions</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <Button variant="outline" className="h-16 flex flex-col gap-2 hover:bg-washi">
@@ -112,7 +112,7 @@ export default function TwitterSearch() {
             </TabsContent>
 
             <TabsContent value="collections" className="space-y-4">
-              <Card className="paper-card p-4">
+              <Card className="paper-card shadow-floating p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Hash className="w-5 h-5 text-bamboo" />
                   <h3 className="font-semibold text-ink">Your Collections</h3>
@@ -139,7 +139,7 @@ export default function TwitterSearch() {
             </TabsContent>
 
             <TabsContent value="history" className="space-y-4">
-              <Card className="paper-card p-4">
+              <Card className="paper-card shadow-floating p-4">
                 <div className="flex items-center gap-2 mb-4">
                   <Clock className="w-5 h-5 text-muted-foreground" />
                   <h3 className="font-semibold text-ink">Recent Searches</h3>
