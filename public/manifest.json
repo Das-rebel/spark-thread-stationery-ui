@@ -1,0 +1,78 @@
+{
+  "name": "Brain Spark - Second Brain",
+  "short_name": "BrainSpark",
+  "description": "Your digital knowledge companion. Organize, discover, and connect your thoughts with Japanese stationery aesthetics.",
+  "theme_color": "#2563eb",
+  "background_color": "#fefbf4",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "start_url": "/",
+  "lang": "en-US",
+  "categories": ["productivity", "utilities", "education"],
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "placeholder.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "placeholder.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Knowledge Hub",
+      "short_name": "Hub",
+      "description": "View your bookmark collections",
+      "url": "/twitter",
+      "icons": [
+        {
+          "src": "placeholder.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Neural Network",
+      "short_name": "Neural",
+      "description": "Explore your knowledge graph",
+      "url": "/?view=neural",
+      "icons": [
+        {
+          "src": "placeholder.svg",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Quick Compose",
+      "short_name": "Compose",
+      "description": "Add new bookmark",
+      "url": "/twitter/compose",
+      "icons": [
+        {
+          "src": "placeholder.svg",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "placeholder.svg",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ]
+}

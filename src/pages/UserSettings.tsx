@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AppLayout } from "@/components/layout/AppLayout";
 import { UserGreeting } from "@/components/user/UserGreeting";
 import { Card } from "@/components/ui/card";
@@ -8,7 +8,9 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CustomIcons } from "@/components/icons";
+import { useSettings } from "@/contexts/SettingsContext";
 import { 
   Bell, 
   Moon, 
@@ -19,30 +21,60 @@ import {
   Eye,
   Palette,
   Volume2,
-  Vibrate
+  Vibrate,
+  Sun,
+  Monitor,
+  Smartphone,
+  RefreshCw
 } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 
 export default function UserSettings() {
-  const [settings, setSettings] = useState({
-    notifications: true,
-    darkMode: false,
-    autoSync: true,
-    soundEnabled: true,
-    hapticFeedback: true,
-    autoBookmark: false,
-    aiTraining: true,
-    userName: "Knowledge Seeker",
-    avatar: "🧠"
-  });
+  const { settings, updateSettings, resetSettings, isLoading, error } = useSettings();
 
-  const handleSettingChange = (key: string, value: boolean | string) => {
-    setSettings(prev => ({ ...prev, [key]: value }));
+  const handleSettingChange = (key: string, value: any) => {
+    updateSettings({ [key]: value });
     toast({
       title: "Settings Updated",
       description: `${key} has been updated successfully.`,
     });
   };
+
+  const handleNestedSettingChange = (section: string, key: string, value: any) => {
+    updateSettings({
+      [section]: {
+        ...settings[section as keyof typeof settings],
+        [key]: value
+      }
+    });
+    toast({
+      title: "Settings Updated",
+      description: `${key} preference updated.`,
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <AppLayout>
+        <div className="min-h-screen flex items-center justify-center">
+          <RefreshCw className="w-8 h-8 animate-spin text-primary" />
+        </div>
+      </AppLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <AppLayout>
+        <div className="min-h-screen flex items-center justify-center">
+          <Card className="paper-card p-6 text-center">
+            <p className="text-red-600 mb-4">{error}</p>
+            <Button onClick={() => window.location.reload()}>Retry</Button>
+          </Card>
+        </div>
+      </AppLayout>
+    );
+  }
 
   return (
     <AppLayout>
@@ -50,51 +82,143 @@ export default function UserSettings() {
         {/* User Greeting */}
         <div className="p-4">
           <UserGreeting 
-            userName={settings.userName}
-            avatar={settings.avatar}
+            userName="Knowledge Seeker"
+            avatar="🧠"
           />
         </div>
 
         {/* Settings Sections */}
         <div className="p-4 space-y-6">
-          {/* Profile Settings */}
+          {/* Theme Settings */}
           <Card className="paper-card p-6">
             <div className="flex items-center gap-2 mb-6">
-              <CustomIcons.UserProfile className="w-5 h-5 text-primary" />
-              <h3 className="font-semibold text-ink">Profile</h3>
+              <Palette className="w-5 h-5 text-primary" />
+              <h3 className="font-semibold text-ink">Appearance</h3>
             </div>
             
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
-                <Label htmlFor="userName" className="text-sm font-medium">Display Name</Label>
-                <Input
-                  id="userName"
-                  value={settings.userName}
-                  onChange={(e) => handleSettingChange('userName', e.target.value)}
-                  className="mt-1 paper-input"
+                <Label className="text-sm font-medium">Theme</Label>
+                <Select 
+                  value={settings.theme} 
+                  onValueChange={(value) => handleSettingChange('theme', value)}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="light">
+                      <div className="flex items-center gap-2">
+                        <Sun className="w-4 h-4" />
+                        Light
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="dark">
+                      <div className="flex items-center gap-2">
+                        <Moon className="w-4 h-4" />
+                        Dark
+                      </div>
+                    </SelectItem>
+                    <SelectItem value="auto">
+                      <div className="flex items-center gap-2">
+                        <Monitor className="w-4 h-4" />
+                        Auto
+                      </div>
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label className="text-sm font-medium">Display Density</Label>
+                <Select 
+                  value={settings.display.density} 
+                  onValueChange={(value) => handleNestedSettingChange('display', 'density', value)}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="compact">Compact</SelectItem>
+                    <SelectItem value="comfortable">Comfortable</SelectItem>
+                    <SelectItem value="spacious">Spacious</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label className="text-sm font-medium">Font Size</Label>
+                <Select 
+                  value={settings.display.fontSize} 
+                  onValueChange={(value) => handleNestedSettingChange('display', 'fontSize', value)}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="small">Small</SelectItem>
+                    <SelectItem value="medium">Medium</SelectItem>
+                    <SelectItem value="large">Large</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium">Animations</div>
+                  <div className="text-sm text-muted-foreground">Enable smooth animations</div>
+                </div>
+                <Switch
+                  checked={settings.display.animations}
+                  onCheckedChange={(checked) => handleNestedSettingChange('display', 'animations', checked)}
                 />
               </div>
-              
-              <div>
-                <Label className="text-sm font-medium">Avatar</Label>
-                <div className="flex items-center gap-3 mt-2">
-                  <div className="w-12 h-12 bg-gradient-sakura rounded-full flex items-center justify-center text-2xl">
-                    {settings.avatar}
-                  </div>
-                  <div className="grid grid-cols-4 gap-2">
-                    {['🧠', '🎯', '📚', '💡', '🌸', '⭐', '🚀', '🎨'].map((emoji) => (
-                      <Button
-                        key={emoji}
-                        variant="outline"
-                        size="sm"
-                        className="w-10 h-10 p-0"
-                        onClick={() => handleSettingChange('avatar', emoji)}
-                      >
-                        {emoji}
-                      </Button>
-                    ))}
-                  </div>
+            </div>
+          </Card>
+
+          {/* Notifications */}
+          <Card className="paper-card p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <Bell className="w-5 h-5 text-bamboo" />
+              <h3 className="font-semibold text-ink">Notifications</h3>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium">Push Notifications</div>
+                  <div className="text-sm text-muted-foreground">Get notified on your device</div>
                 </div>
+                <Switch
+                  checked={settings.notifications.push}
+                  onCheckedChange={(checked) => handleNestedSettingChange('notifications', 'push', checked)}
+                />
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium">Email Notifications</div>
+                  <div className="text-sm text-muted-foreground">Receive updates via email</div>
+                </div>
+                <Switch
+                  checked={settings.notifications.email}
+                  onCheckedChange={(checked) => handleNestedSettingChange('notifications', 'email', checked)}
+                />
+              </div>
+
+              <Separator />
+
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium">In-App Notifications</div>
+                  <div className="text-sm text-muted-foreground">Show notifications within the app</div>
+                </div>
+                <Switch
+                  checked={settings.notifications.inApp}
+                  onCheckedChange={(checked) => handleNestedSettingChange('notifications', 'inApp', checked)}
+                />
               </div>
             </div>
           </Card>
@@ -102,122 +226,55 @@ export default function UserSettings() {
           {/* Preferences */}
           <Card className="paper-card p-6">
             <div className="flex items-center gap-2 mb-6">
-              <CustomIcons.Settings className="w-5 h-5 text-bamboo" />
+              <Smartphone className="w-5 h-5 text-primary" />
               <h3 className="font-semibold text-ink">Preferences</h3>
             </div>
             
             <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Bell className="w-5 h-5 text-muted-foreground" />
-                  <div>
-                    <div className="font-medium">Notifications</div>
-                    <div className="text-sm text-muted-foreground">Get notified about new bookmarks and AI insights</div>
-                  </div>
-                </div>
-                <Switch
-                  checked={settings.notifications}
-                  onCheckedChange={(checked) => handleSettingChange('notifications', checked)}
-                />
+              <div>
+                <Label className="text-sm font-medium">Default View</Label>
+                <Select 
+                  value={settings.preferences.defaultView} 
+                  onValueChange={(value) => handleNestedSettingChange('preferences', 'defaultView', value)}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="feed">Feed View</SelectItem>
+                    <SelectItem value="neural">Neural Network</SelectItem>
+                    <SelectItem value="bookmarks">Bookmarks</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Moon className="w-5 h-5 text-muted-foreground" />
-                  <div>
-                    <div className="font-medium">Dark Mode</div>
-                    <div className="text-sm text-muted-foreground">Switch to dark theme</div>
-                  </div>
-                </div>
-                <Switch
-                  checked={settings.darkMode}
-                  onCheckedChange={(checked) => handleSettingChange('darkMode', checked)}
-                />
-              </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Volume2 className="w-5 h-5 text-muted-foreground" />
-                  <div>
-                    <div className="font-medium">Sound Effects</div>
-                    <div className="text-sm text-muted-foreground">Play sounds for interactions</div>
-                  </div>
-                </div>
-                <Switch
-                  checked={settings.soundEnabled}
-                  onCheckedChange={(checked) => handleSettingChange('soundEnabled', checked)}
-                />
-              </div>
-
-              <Separator />
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <Vibrate className="w-5 h-5 text-muted-foreground" />
-                  <div>
-                    <div className="font-medium">Haptic Feedback</div>
-                    <div className="text-sm text-muted-foreground">Vibrate on touch interactions</div>
-                  </div>
-                </div>
-                <Switch
-                  checked={settings.hapticFeedback}
-                  onCheckedChange={(checked) => handleSettingChange('hapticFeedback', checked)}
-                />
-              </div>
-            </div>
-          </Card>
-
-          {/* AI & Learning */}
-          <Card className="paper-card p-6">
-            <div className="flex items-center gap-2 mb-6">
-              <CustomIcons.BrainAI className="w-5 h-5 text-primary" />
-              <h3 className="font-semibold text-ink">AI & Learning</h3>
-              <Badge variant="secondary" className="ml-auto">
-                <Eye className="w-3 h-3 mr-1" />
-                89% Trained
-              </Badge>
-            </div>
-            
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="font-medium">Auto-bookmark Links</div>
-                  <div className="text-sm text-muted-foreground">Automatically save shared links</div>
-                </div>
-                <Switch
-                  checked={settings.autoBookmark}
-                  onCheckedChange={(checked) => handleSettingChange('autoBookmark', checked)}
-                />
-              </div>
-
-              <Separator />
 
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium">AI Training</div>
-                  <div className="text-sm text-muted-foreground">Help improve AI recommendations</div>
+                  <div className="font-medium">Auto Save</div>
+                  <div className="text-sm text-muted-foreground">Automatically save changes</div>
                 </div>
                 <Switch
-                  checked={settings.aiTraining}
-                  onCheckedChange={(checked) => handleSettingChange('aiTraining', checked)}
+                  checked={settings.preferences.autoSave}
+                  onCheckedChange={(checked) => handleNestedSettingChange('preferences', 'autoSave', checked)}
                 />
               </div>
 
-              <Separator />
-
-              <div className="grid grid-cols-2 gap-3">
-                <Button variant="outline" className="flex flex-col gap-2 h-16">
-                  <Upload className="w-5 h-5" />
-                  <span className="text-xs">Export Data</span>
-                </Button>
-                <Button variant="outline" className="flex flex-col gap-2 h-16">
-                  <Download className="w-5 h-5" />
-                  <span className="text-xs">Import Data</span>
-                </Button>
+              <div>
+                <Label className="text-sm font-medium">Sync Interval (seconds)</Label>
+                <Select 
+                  value={settings.preferences.syncInterval.toString()} 
+                  onValueChange={(value) => handleNestedSettingChange('preferences', 'syncInterval', parseInt(value))}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="60">1 minute</SelectItem>
+                    <SelectItem value="300">5 minutes</SelectItem>
+                    <SelectItem value="600">10 minutes</SelectItem>
+                    <SelectItem value="1800">30 minutes</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </Card>
@@ -229,19 +286,72 @@ export default function UserSettings() {
               <h3 className="font-semibold text-ink">Privacy & Security</h3>
             </div>
             
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="font-medium">Analytics</div>
+                  <div className="text-sm text-muted-foreground">Help improve the app with usage data</div>
+                </div>
+                <Switch
+                  checked={settings.privacy.analytics}
+                  onCheckedChange={(checked) => handleNestedSettingChange('privacy', 'analytics', checked)}
+                />
+              </div>
+
+              <div>
+                <Label className="text-sm font-medium">Profile Visibility</Label>
+                <Select 
+                  value={settings.privacy.profileVisibility} 
+                  onValueChange={(value) => handleNestedSettingChange('privacy', 'profileVisibility', value)}
+                >
+                  <SelectTrigger className="mt-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="public">Public</SelectItem>
+                    <SelectItem value="friends">Friends Only</SelectItem>
+                    <SelectItem value="private">Private</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          </Card>
+
+          {/* Data Management */}
+          <Card className="paper-card p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <Download className="w-5 h-5 text-blue-600" />
+              <h3 className="font-semibold text-ink">Data Management</h3>
+            </div>
+            
             <div className="space-y-4">
-              <Button variant="outline" className="w-full justify-start gap-3">
-                <Eye className="w-4 h-4" />
-                Privacy Settings
-              </Button>
-              <Button variant="outline" className="w-full justify-start gap-3">
-                <Shield className="w-4 h-4" />
-                Security Settings
-              </Button>
-              <Button variant="outline" className="w-full justify-start gap-3 text-red-600 hover:text-red-700">
-                <Trash2 className="w-4 h-4" />
-                Delete Account
-              </Button>
+              <div className="grid grid-cols-2 gap-3">
+                <Button variant="outline" className="flex flex-col gap-2 h-16">
+                  <Upload className="w-5 h-5" />
+                  <span className="text-xs">Export Data</span>
+                </Button>
+                <Button variant="outline" className="flex flex-col gap-2 h-16">
+                  <Download className="w-5 h-5" />
+                  <span className="text-xs">Import Data</span>
+                </Button>
+              </div>
+              
+              <Separator />
+              
+              <div className="space-y-3">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start gap-3"
+                  onClick={resetSettings}
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Reset All Settings
+                </Button>
+                <Button variant="outline" className="w-full justify-start gap-3 text-red-600 hover:text-red-700">
+                  <Trash2 className="w-4 h-4" />
+                  Delete All Data
+                </Button>
+              </div>
             </div>
           </Card>
         </div>
